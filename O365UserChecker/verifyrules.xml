@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rules>
+  <!-- put your domain server for your accounts here -->  
+  <rule command="Get-MsolUser" argumentname="UserPrincipalName" argumentvalue="%UPN%">
+    <match property="IsLicensed" value="True"/>
+    <match property="LicenseReconciliationNeeded" value="False"/>
+    <match property="BlockCredential" value="False"/>
+    <match property="OverallProvisioningStatus" value="Success"/>
+    <match property="ValidationStatus" value="Healthy"/>
+    <!-- put your standard student license here-->
+    <match property="Licenses" value="{testtacomacc:EXCHANGESTANDARD_STUDENT}"/>
+    <!-- these are the properties to compare with the local user. The property names come from 
+         the UserPrincipal class not ldap attribute names, except for objectGuid -->
+    <match property="ImmutableId" value="$objectGuid"/>
+    <match property="UserPrincipalName" value="$UserPrincipalName" />
+    <match property="FirstName" value="$GivenName" />
+    <match property="LastName" value="$SurName" />
+    <match property="DisplayName" value="$DisplayName" />
+    <match property="City" value="$City" />
+  </rule>  
+  <!-- This is a kind of ugly mechanism in order to turn certain internal Microsoft Powershell objects to strings correctly,
+       there seems to be no other way to duplicate the String output that powershell gives to these objects -->
+  <tostringhints>
+    <typehint name="Microsoft.Online.Administration.UserLicense" property="AccountSkuId"/>    
+  </tostringhints>
+</rules>
