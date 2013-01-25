@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<rules>
-  <!-- put your domain server for your accounts here -->  
+<rules>  
   <rule command="Get-MsolUser" argumentname="UserPrincipalName" argumentvalue="%UPN%">
     <match property="IsLicensed" value="True"/>
     <match property="LicenseReconciliationNeeded" value="False"/>
     <match property="BlockCredential" value="False"/>
     <match property="OverallProvisioningStatus" value="Success"/>
     <match property="ValidationStatus" value="Healthy"/>
-    <!-- put your standard student license here-->
-    <match property="Licenses" value="{testtacomacc:EXCHANGESTANDARD_STUDENT}"/>
+    <!-- put your standard student license here (see output from get-msoluser -userprincipalname gooduser@yourdomain.edu | fl)-->
+    <match property="Licenses" value="{myo365domain:EXCHANGESTANDARD_STUDENT}"/>
     <!-- these are the properties to compare with the local user. The property names come from 
          the UserPrincipal class except for objectGuid which comes from the ldap object of the user -->
     <match property="ImmutableId" value="$objectGuid"/>
