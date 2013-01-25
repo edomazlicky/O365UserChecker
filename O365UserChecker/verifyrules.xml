@@ -10,14 +10,21 @@
     <!-- put your standard student license here-->
     <match property="Licenses" value="{testtacomacc:EXCHANGESTANDARD_STUDENT}"/>
     <!-- these are the properties to compare with the local user. The property names come from 
-         the UserPrincipal class not ldap attribute names, except for objectGuid -->
+         the UserPrincipal class except for objectGuid which comes from the ldap object of the user -->
     <match property="ImmutableId" value="$objectGuid"/>
     <match property="UserPrincipalName" value="$UserPrincipalName" />
     <match property="FirstName" value="$GivenName" />
     <match property="LastName" value="$SurName" />
     <match property="DisplayName" value="$DisplayName" />
     <match property="City" value="$City" />
-  </rule>  
+  </rule>
+  <!-- Get-Casmailbox required the Live powershell context thus the powershell="Live" -->
+  <rule command="Get-CasMailbox" argumentname="Identity" argumentvalue="%UPN%" powershell="Live">
+    <match property="OwaEnabled" value="True"/>
+    <match property="ImapEnabled" value="True"/>
+    <match property="ActiveSyncEnabled" value="True"/>
+    <match property="PopEnabled" value="True"/>
+  </rule>
   <!-- This is a kind of ugly mechanism in order to turn certain internal Microsoft Powershell objects to strings correctly,
        there seems to be no other way to duplicate the String output that powershell gives to these objects -->
   <tostringhints>
